@@ -149,10 +149,40 @@ const initDB = async () => {
     )
   `);
 
-  await dbRun(
-    `INSERT INTO users (username, password, email, avatar, bio) VALUES (?, ?, ?, ?, ?)`,
-    ['demo', '123456', 'demo@example.com', 'https://api.dicebear.com/7.x/avataaars/svg?seed=demo', '热爱学习的开发者']
-  );
+  const usersData = [
+    { username: 'demo', password: '123456', email: 'demo@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=demo', bio: '热爱学习的开发者' },
+    { username: 'alice', password: '123456', email: 'alice@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=alice', bio: '前端工程师' },
+    { username: 'bob', password: '123456', email: 'bob@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=bob', bio: '后端开发者' },
+    { username: 'charlie', password: '123456', email: 'charlie@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=charlie', bio: '全栈工程师' },
+    { username: 'david', password: '123456', email: 'david@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=david', bio: '数据分析师' },
+    { username: 'eve', password: '123456', email: 'eve@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=eve', bio: '产品经理' },
+    { username: 'frank', password: '123456', email: 'frank@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=frank', bio: '运维工程师' },
+    { username: 'grace', password: '123456', email: 'grace@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=grace', bio: 'UI设计师' },
+    { username: 'henry', password: '123456', email: 'henry@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=henry', bio: '安全工程师' },
+    { username: 'ivy', password: '123456', email: 'ivy@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ivy', bio: '测试工程师' },
+    { username: 'jack', password: '123456', email: 'jack@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=jack', bio: '架构师' },
+    { username: 'kate', password: '123456', email: 'kate@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=kate', bio: '机器学习工程师' },
+    { username: 'leo', password: '123456', email: 'leo@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=leo', bio: '游戏开发者' },
+    { username: 'mia', password: '123456', email: 'mia@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=mia', bio: 'iOS开发者' },
+    { username: 'nick', password: '123456', email: 'nick@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=nick', bio: 'Android开发者' },
+    { username: 'olivia', password: '123456', email: 'olivia@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=olivia', bio: 'DevOps工程师' },
+    { username: 'peter', password: '123456', email: 'peter@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=peter', bio: '区块链开发者' },
+    { username: 'queen', password: '123456', email: 'queen@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=queen', bio: '项目经理' },
+    { username: 'ryan', password: '123456', email: 'ryan@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ryan', bio: '云计算工程师' },
+    { username: 'sophia', password: '123456', email: 'sophia@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=sophia', bio: 'AI研究员' },
+    { username: 'tom', password: '123456', email: 'tom@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=tom', bio: '嵌入式工程师' },
+    { username: 'uma', password: '123456', email: 'uma@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=uma', bio: '大数据工程师' },
+    { username: 'victor', password: '123456', email: 'victor@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=victor', bio: '网络安全专家' },
+    { username: 'wendy', password: '123456', email: 'wendy@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=wendy', bio: '技术写作' },
+    { username: 'xander', password: '123456', email: 'xander@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=xander', bio: '运维开发' },
+  ];
+  
+  for (const user of usersData) {
+    await dbRun(
+      `INSERT INTO users (username, password, email, avatar, bio) VALUES (?, ?, ?, ?, ?)`,
+      [user.username, user.password, user.email, user.avatar, user.bio]
+    );
+  }
 
   const coursesData = [
     {
@@ -379,11 +409,54 @@ const initDB = async () => {
     );
   }
 
+  const now = new Date();
+  const studyRecordsData = [];
+  const userDurations = {};
+  
+  for (let userId = 1; userId <= 25; userId++) {
+    const totalMinutes = Math.floor(Math.random() * 1800) + 120;
+    userDurations[userId] = totalMinutes * 60;
+    
+    const numRecords = Math.floor(Math.random() * 8) + 3;
+    for (let i = 0; i < numRecords; i++) {
+      const daysAgo = Math.floor(Math.random() * 30);
+      const courseId = Math.floor(Math.random() * 8) + 1;
+      const chapterId = (courseId - 1) * 13 + Math.floor(Math.random() * 13) + 1;
+      const duration = Math.floor(Math.random() * 3600) + 300;
+      const progress = Math.min(100, Math.floor(duration / 30));
+      
+      const recordDate = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000);
+      
+      studyRecordsData.push({
+        user_id: userId,
+        course_id: courseId,
+        chapter_id: chapterId,
+        progress: progress,
+        watched_duration: duration,
+        is_completed: progress >= 100 ? 1 : 0,
+        last_watched_at: recordDate.toISOString()
+      });
+    }
+  }
+  
+  for (const record of studyRecordsData) {
+    await dbRun(
+      `INSERT INTO study_records (user_id, course_id, chapter_id, progress, watched_duration, is_completed, last_watched_at) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [record.user_id, record.course_id, record.chapter_id, record.progress, record.watched_duration, record.is_completed, record.last_watched_at]
+    );
+  }
+
   console.log('数据库初始化完成！');
   console.log('测试账号: demo / 123456');
   
   const chapters = await dbAll('SELECT COUNT(*) as count FROM course_chapters');
   console.log('章节总数:', chapters[0].count);
+  
+  const users = await dbAll('SELECT COUNT(*) as count FROM users');
+  console.log('用户总数:', users[0].count);
+  
+  const records = await dbAll('SELECT COUNT(*) as count FROM study_records');
+  console.log('学习记录总数:', records[0].count);
 };
 
 initDB()
